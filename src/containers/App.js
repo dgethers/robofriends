@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CardList from "../components/CardList";
 import SearchBox from "../components/SearchBox";
 import Scroll from "../components/Scroll";
+import ErrorBoundry from "../components/ErrorBoundry";
 import "./App.css";
 import { setSearchField, requestRobots } from "../actions";
 import { connect } from "react-redux";
@@ -18,12 +19,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-    onRequestRobots: () => requestRobots(dispatch)
+    onRequestRobots: () => requestRobots(dispatch),
   };
 };
 
 class App extends Component {
-
   componentDidMount() {
     this.props.onRequestRobots();
   }
@@ -42,7 +42,9 @@ class App extends Component {
           <h1 className="f2">Robo Friends</h1>
           <SearchBox searchChange={onSearchChange} />
           <Scroll>
-            <CardList robots={filteredRobots} />
+            <ErrorBoundry>
+              <CardList robots={filteredRobots} />
+            </ErrorBoundry>
           </Scroll>
         </div>
       );
